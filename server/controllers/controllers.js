@@ -1,6 +1,6 @@
 const { condition } = require("sequelize");
 const { Op } = require("sequelize");
-const { Model } = require("../models/models.js");
+const { Model, Charts } = require("../models/models.js");
 
 const getAll = async (req, res) => {
   try {
@@ -154,6 +154,17 @@ const getRange = async (req, res) => {
   }
 };
 
+const getAllCharts = async (req, res) => {
+  try {
+    const charts = await Charts.find({
+      attributes: ["date", "image"],
+    });
+    res.json(charts);
+  } catch (error) {
+    res.json({ message: error.message });
+  }
+};
+
 module.exports = {
   getAll,
   getAllYears,
@@ -165,4 +176,5 @@ module.exports = {
   getDay,
   getHour,
   getRange,
+  getAllCharts,
 };

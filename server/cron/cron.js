@@ -4,17 +4,15 @@ const mysql = require("mysql2");
 const cron = require("node-cron");
 const moment = require("moment");
 const mongoose = require("mongoose");
-const { ChartSchema } = require("../models/models.js");
+const { Charts } = require("../models/models.js");
 const { ChartJSNodeCanvas } = require("chartjs-node-canvas");
 
-const width = 400; //px
-const height = 400; //px
-const backgroundColour = "white"; // Uses https://www.w3schools.com/tags/canvas_fillstyle.asp
-const chartJSNodeCanvas = new ChartJSNodeCanvas({
-  width,
-  height,
-  backgroundColour,
-});
+const options = { width: 1000, height: 800 };
+const canvasRenderService = new ChartJSNodeCanvas(options);
+
+// BTC price and timestamp
+let prices = [];
+let times = [];
 
 const con = mysql.createPool({
   multipleStatements: true,
@@ -41,9 +39,6 @@ mongoose
     console.log(Error, err.message);
   });
 
-// BTC price and timestamp
-let prices = [];
-
 // set up Ably
 let ably = new Ably.Realtime(process.env.ABLY);
 let chanName = "[product:ably-coindesk/bitcoin]bitcoin:usd";
@@ -60,27 +55,13 @@ channel.subscribe(function (message) {
     moment(message.timestamp).format("HH"),
     moment(message.timestamp).format("HH00"),
   ]);
+  times.push(moment(message.timestamp).format("YYYY-MM-DD HH:mm:ss"));
 });
 
-cron.schedule("*/5 * * * * *", async () => {
+cron.schedule("*/5 * * * *", async () => {
   let newPrices = prices;
+  let newTimes = times;
   prices = [];
-
-  // con.query(`SHOW TABLES LIKE data;`, function (err, rows, fields) {
-  //   if (err) throw err;
-
-  //   rows.length === 0
-  //     ? con.query(
-  //         `CREATE TABLE data (id INT AUTO_INCREMENT PRIMARY KEY, price FLOAT, timestamp BIGINT, date DATETIME, year INT, month INT, day INT, hour INT, zeroHour INT(4) ZEROFILL UNSIGNED);`,
-  //         [1, 2],
-
-  //         function (err, rows, fields) {
-  //           console.log(`Table data created`);
-  //           if (err) throw err;
-  //         }
-  //       )
-  //     :
-  // });
 
   con.query(
     `INSERT INTO data (price, timestamp, date, year, month, day, hour, zeroHour) VALUES ?`,
@@ -98,23 +79,29 @@ cron.schedule("*/5 * * * * *", async () => {
 
   (async () => {
     const configuration = {
-      // See https://www.chartjs.org/docs/latest/configuration
       type: "line",
-      data: newPrices,
-      options: {},
-      plugins: [],
-      width: 800,
-      height: 600,
+      data: {
+        labels: newTimes,
+        datasets: [
+          {
+            label: `Bitcoin price USD - ${moment().format(
+              "YYYY-MM-DD HH:mm:ss"
+            )}`,
+            data: newPrices,
+          },
+        ],
+      },
     };
 
-    let chartUrl = await chartJSNodeCanvas.renderToDataURL(configuration);
+    const imageBuffer = await canvasRenderService.renderToDataURL(
+      configuration
+    );
+    console.log("🚀 - file: cron.js - line 117 - imageBuffer", imageBuffer);
 
-    let base64string = chartUrl.split(",")[1];
-
-    model = new ChartSchema({
+    model = new Charts({
       date: moment().format("YYYY-MM-DD HH00"),
       image: {
-        data: Buffer.from(base64string, "base64"),
+        data: imageBuffer,
         contentType: "image/png",
       },
     });

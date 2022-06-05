@@ -10,6 +10,7 @@ const {
   getDay,
   getHour,
   getRange,
+  getAllCharts,
 } = require("../controllers/controllers.js");
 
 const router = express.Router();
@@ -29,5 +30,7 @@ router.get(
   "/getrange/:fromyear-:frommonth-:fromday-:fromhour/:toyear-:tomonth-:today-:tohour",
   getRange
 );
+
+router.get("/allcharts", getAllCharts);
 
 module.exports = router;

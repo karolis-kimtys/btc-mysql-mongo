@@ -28,22 +28,4 @@ app.use(cors());
 app.use(express.json());
 app.use("/", routes);
 
-app.route("/add").post((req, res) => {
-  const date = req.body.date;
-  const url = req.body.url;
-
-  const newChart = new ChartSchema({
-    date: "date",
-    image: {
-      data: Buffer.from(url, "base64"),
-      contentType: "image/png",
-    },
-  });
-
-  newChart
-    .save()
-    .then(() => res.json(`Chart.js URL saved in DB!`))
-    .catch((err) => res.status(400).json("Error: " + err));
-});
-
 app.listen(5001, () => console.log("Server running at port 5001"));

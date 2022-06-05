@@ -41,13 +41,12 @@ const chartSchema = new Schema({
   date: {
     type: String,
   },
-
   image: {
     data: String,
     contentType: String,
   },
 });
 
-const ChartSchema = mongoose.model("Chart Schema", chartSchema);
+const Charts = mongoose.model("Charts", chartSchema);
 
-module.exports = { Model, ChartSchema };
+module.exports = { Model, Charts };

@@ -1,12 +1,13 @@
 import { useEffect, useState, useRef } from "react";
 import "./Main.css";
 import LiveChart from "./LiveChart/LiveChart";
-import Chart from "chart.js/auto";
+import Charts from "./Charts/Charts";
+// import Chart from "chart.js/auto";
 import { Line } from "react-chartjs-2";
 import moment from "moment";
 
 function Main() {
-  const [live, setLive] = useState(true);
+  const [page, setPage] = useState("live");
 
   const [years, setYears] = useState([]);
   const [months, setMonths] = useState([]);
@@ -136,9 +137,9 @@ function Main() {
             name="test"
             value="live"
             onChange={() => {
-              setLive(true);
+              setPage("live");
             }}
-            checked={live}
+            checked={page === "live"}
           />
         </div>
         <div>
@@ -148,15 +149,28 @@ function Main() {
             name="test"
             value="historical"
             onChange={() => {
-              setLive(false);
+              setPage("historical");
+            }}
+          />
+        </div>
+        <div>
+          <label>Hourly Charts</label>
+          <input
+            type="radio"
+            name="test"
+            value="charts"
+            onChange={() => {
+              setPage("charts");
             }}
           />
         </div>
       </form>
 
-      {live ? (
-        <LiveChart />
-      ) : (
+      {page === "live" && <LiveChart />}
+
+      {page === "charts" && <Charts />}
+
+      {page === "historical" && (
         <div className="historical">
           <div>
             <div className="historical_select">
