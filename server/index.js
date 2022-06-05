@@ -3,7 +3,6 @@ const { mysqlDB, mongoose } = require("./database/databases.js");
 const routes = require("./routes/routes.js");
 const cors = require("cors");
 const app = express();
-const { ChartSchema } = require("./models/models.js");
 
 (async () => {
   try {

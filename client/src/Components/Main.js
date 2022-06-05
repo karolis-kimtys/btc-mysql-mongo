@@ -2,7 +2,6 @@ import { useEffect, useState, useRef } from "react";
 import "./Main.css";
 import LiveChart from "./LiveChart/LiveChart";
 import Charts from "./Charts/Charts";
-// import Chart from "chart.js/auto";
 import { Line } from "react-chartjs-2";
 import moment from "moment";
 
