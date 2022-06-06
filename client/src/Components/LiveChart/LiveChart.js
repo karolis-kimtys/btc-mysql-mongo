@@ -9,6 +9,8 @@ const ably = new Ably.Realtime(
   "k_jQfg.O2UFyg:uXvxnGuqg4cvshEJQJKRh1SPNsg7rCQFcLG_sfIFyqg"
 );
 
+new Chart();
+
 export default function LiveChart() {
   const [current, setCurrent] = useState([]);
   const [price, setPrice] = useState([]);
