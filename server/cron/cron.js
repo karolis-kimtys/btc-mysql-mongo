@@ -7,7 +7,11 @@ const mongoose = require("mongoose");
 const { Charts } = require("../models/models.js");
 const { ChartJSNodeCanvas } = require("chartjs-node-canvas");
 
-const options = { width: 1000, height: 800 };
+const options = {
+  width: 750,
+  height: 500,
+};
+
 const canvasRenderService = new ChartJSNodeCanvas(options);
 
 // BTC price and timestamp
@@ -16,10 +20,10 @@ let times = [];
 
 const con = mysql.createPool({
   multipleStatements: true,
-  host: "127.0.0.1",
-  user: "root",
-  password: "password",
-  database: "bitcoin",
+  host: process.env.SQL_HOST,
+  user: process.env.SQL_USER,
+  password: process.env.SQL_PASSWORD,
+  database: process.env.SQL_DB,
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
@@ -88,6 +92,24 @@ cron.schedule("*/5 * * * *", async () => {
               "YYYY-MM-DD HH:mm:ss"
             )}`,
             data: newPrices,
+            fill: false,
+            lineTension: 0.2,
+            backgroundColor: "rgba(75,192,192,0.4)",
+            borderColor: "rgba(75,192,192,1)",
+            borderCapStyle: "butt",
+            borderWidth: 2,
+            borderDash: [],
+            borderDashOffset: 0.0,
+            borderJoinStyle: "round",
+            pointBorderColor: "rgba(75,192,192,1)",
+            pointBackgroundColor: "#fff",
+            pointBorderWidth: 1,
+            pointHoverRadius: 5,
+            pointHoverBackgroundColor: "rgba(75,192,192,1)",
+            pointHoverBorderColor: "rgba(220,220,220,1)",
+            pointHoverBorderWidth: 1,
+            pointRadius: 1,
+            pointHitRadius: 10,
           },
         ],
       },

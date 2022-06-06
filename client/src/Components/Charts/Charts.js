@@ -31,12 +31,22 @@ export default function Charts() {
 
     var w = window.open("");
     w.document.write(image.outerHTML);
+    w.document.title = "Bitcoin Chart";
   };
 
   return (
-    <div className="chart_container">
+    <div>
+      {loading && (
+        <button
+          className="button"
+          onClick={() => {
+            refetch();
+          }}>
+          Refresh
+        </button>
+      )}
       {loading ? (
-        <div>
+        <div className="chart_container">
           {Object.values(charts).map((item, key) => {
             return (
               <div
@@ -48,12 +58,6 @@ export default function Charts() {
               </div>
             );
           })}
-          <button
-            onClick={() => {
-              refetch();
-            }}>
-            Refresh
-          </button>
         </div>
       ) : (
         <div>Loading...</div>

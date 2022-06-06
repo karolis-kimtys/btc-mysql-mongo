@@ -7,13 +7,20 @@
   align-items: center;
   flex-wrap: wrap;
 }
+.button {
+  margin: 10px;
+}
 
 .charts {
   width: 100px;
   padding: 10px;
+  transition: all 0.5s ease;
 }
 
 .charts:hover {
-  transform: scale(1.5);
   cursor: pointer;
+  background-color: #e7e7e7;
+  transition: all 0.5s ease;
+  border-radius: 5px;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.527), rgba(0, 0, 0, 0.5));
 }

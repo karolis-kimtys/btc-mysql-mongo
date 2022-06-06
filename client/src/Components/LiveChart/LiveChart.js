@@ -33,7 +33,7 @@ export default function LiveChart() {
 
         times.length >= 275 && times.shift();
 
-        times.push(moment(message.timestamp).format("h:mm:ss a"));
+        times.push(moment(message.timestamp).format("YYYY-MM-DD h:mm:ss"));
         setTime(times);
 
         setCurrent(message.data);

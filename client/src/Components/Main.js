@@ -110,7 +110,7 @@ function Main() {
 
         Object.values(json).forEach((item) => {
           price.push(item.price);
-          time.push(moment(item.date).format("h:mm:ss"));
+          time.push(moment(item.date).format("YYYY-MM-DD h:mm:ss"));
         });
 
         setPrices(price);
@@ -129,38 +129,46 @@ function Main() {
   return (
     <div className="Main">
       <form className="form">
-        <div>
+        <div
+          onClick={() => {
+            setPage("live");
+          }}
+          className="radios">
           <label>Live Data</label>
           <input
             type="radio"
             name="test"
             value="live"
-            onChange={() => {
-              setPage("live");
-            }}
             checked={page === "live"}
+            onChange={() => {}}
           />
         </div>
-        <div>
+        <div
+          onClick={() => {
+            setPage("historical");
+          }}
+          className="radios">
           <label>Historical Data</label>
           <input
             type="radio"
             name="test"
             value="historical"
-            onChange={() => {
-              setPage("historical");
-            }}
+            checked={page === "historical"}
+            onChange={() => {}}
           />
         </div>
-        <div>
+        <div
+          onClick={() => {
+            setPage("charts");
+          }}
+          className="radios">
           <label>Hourly Charts</label>
           <input
             type="radio"
             name="test"
             value="charts"
-            onChange={() => {
-              setPage("charts");
-            }}
+            checked={page === "charts"}
+            onChange={() => {}}
           />
         </div>
       </form>

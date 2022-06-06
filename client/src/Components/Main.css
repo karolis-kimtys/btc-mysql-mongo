@@ -21,6 +21,11 @@
   padding: 10px;
 }
 
+.radios label,
+.radios input {
+  cursor: pointer;
+}
+
 .historical {
   max-width: 500px;
   height: 100%;
